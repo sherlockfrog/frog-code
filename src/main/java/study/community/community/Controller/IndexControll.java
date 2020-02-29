@@ -19,4 +19,7 @@ public class IndexControll {
     {
         return "index";
     }
+
+    @GetMapping("/index")
+    public String index1(){return "index";}
 }

@@ -46,4 +46,15 @@ public class Access_TokenDTO {
     public void setState(String state) {
         this.state = state;
     }
+
+    @Override
+    public String toString() {
+        return "Access_TokenDTO{" +
+                "client_id='" + client_id + '\'' +
+                ", client_secret='" + client_secret + '\'' +
+                ", code='" + code + '\'' +
+                ", redirect_url='" + redirect_url + '\'' +
+                ", state='" + state + '\'' +
+                '}';
+    }
 }
