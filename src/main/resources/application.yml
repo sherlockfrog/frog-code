@@ -1,10 +1,10 @@
 spring:
     datasource:
         name: project
-        url: jdbc:mysql://127.0.0.1:3306/community?serverTimezone=UTC
+        url: jdbc:mysql://127.0.0.1:3306/community?serverTimezone=UTC&useSSL=false
         username: root
         password: 123456
-        driver-class-name: com.mysql.jdbc.Driver
+        driver-class-name: com.mysql.cj.jdbc.Driver
 
 mybatis:
      mapper-locations: classpath:mapper/*.xml  #注意：一定要对应mapper映射xml文件的所在路径

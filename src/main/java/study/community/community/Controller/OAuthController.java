@@ -11,7 +11,9 @@ import study.community.community.mapper.UserMapper;
 import study.community.community.model.User;
 import study.community.community.provider.GitHubProvider;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 @Controller
@@ -34,7 +36,7 @@ public class OAuthController {
     @GetMapping("/callback")
     public String callback(@RequestParam(name="code") String code,
                            @RequestParam(name="state") String state,
-                            HttpServletRequest request)
+                           HttpServletRequest request, HttpServletResponse response)
     {
         Access_TokenDTO access_tokenDTO = new Access_TokenDTO();
         access_tokenDTO.setCode(code);
@@ -44,18 +46,23 @@ public class OAuthController {
         access_tokenDTO.setState(state);
         String accessToken = gitHubProvider.getAccessToken(access_tokenDTO);
         GitHubUser githubUser = gitHubProvider.getUser(accessToken);
-        if(githubUser!=null)
+        //System.out.println(accessToken);
+        if(githubUser!=null && githubUser.getName()!=null)
         {
             //登录成功
             request.getSession().setAttribute("user",githubUser);
             User user = new User();
-            user.setToken(UUID.randomUUID().toString());
+            String token = UUID.randomUUID().toString();
+            user.setPhoto(githubUser.getAvatar_url());
+            user.setToken(token);
             user.setAccoundId(String.valueOf(githubUser.getId()));
             user.setName(githubUser.getName());
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
-            System.out.println(user);
+
             userMapper.insert(user);
+
+            response.addCookie(new Cookie("token",token));
 
             return "redirect:/";
         }
